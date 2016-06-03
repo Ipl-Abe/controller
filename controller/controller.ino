@@ -1,4 +1,4 @@
-/*N
+/*
 ///////////////////////////////////////////////////////
 
 //ボードの設定を"Arduino Esplora"に変更する必要あり
@@ -44,7 +44,7 @@ char robot_id_c;
 String robot_id_s;
 
 //ロボット移動速度切り替え用
-unsigned long speed, old_speed,turn_speed = 16,turn_dfspeed = 32;
+unsigned long speed, old_speed,turn_speed = 0,turn_dfspeed = 32;
 unsigned long speed_array[7] = {32,48,64,80,96,112,128};
 int speed_state = 0,speed_state1 = 0,turn_speed_state = 0;
 String speed_s,speed_t;
@@ -217,9 +217,9 @@ void agz_controlRobot(){
     if(turn_speed_state == 2)turn_speed_state=0;
     else turn_speed_state++;
     
-    if(turn_speed_state == 0)turn_speed = 16;
-    else if(turn_speed_state == 1)turn_speed = 32;
-    else if(turn_speed_state == 2)turn_speed = 64;
+    if(turn_speed_state == 0)turn_speed = 0;
+    else if(turn_speed_state == 1)turn_speed = 16;
+    else if(turn_speed_state == 2)turn_speed = 32;
    
     //else if(speed_state == 3)turn_speed = 64;
     //else if(speed_state == 4)turn_speed = 80;
@@ -243,7 +243,7 @@ void agz_controlRobot(){
   else{
     //右//////////
   if((val[4] == LOW) && (old_val[4] == HIGH)){
-   LRmotor(1,1,speed,speed-turn_speed);
+   LRmotor(1,1,turn_speed,speed);
   }  
   else if((val[4] == HIGH) && (old_val[4] ==LOW)){
     LRmotor(0,0,speed,speed);
@@ -267,7 +267,7 @@ void agz_controlRobot(){
   
   //左//////////
   if((val[2] == LOW) && (old_val[2] == HIGH)){
-      LRmotor(1,1,speed-turn_speed,speed);
+      LRmotor(1,1,speed,turn_speed);
   }
   else if((val[2] == HIGH) && (old_val[2] ==LOW)){
   LRmotor(0,0,speed,speed);
@@ -385,7 +385,7 @@ void agz_Back(){
   
   //右//////////
   if((val[4] == LOW) && (old_val[4] == HIGH)){
-   LRmotor(2,2,speed,speed-turn_speed);
+   LRmotor(2,2,turn_speed,speed);
   }  
   else if((val[4] == HIGH) && (old_val[4] ==LOW)){
     LRmotor(0,0,speed,speed);
@@ -409,7 +409,7 @@ void agz_Back(){
   
   //左//////////
   if((val[2] == LOW) && (old_val[2] == HIGH)){
-      LRmotor(2,2,speed-turn_speed,speed);
+      LRmotor(2,2,speed,turn_speed);
   }
   else if((val[2] == HIGH) && (old_val[2] ==LOW)){
   LRmotor(0,0,speed,speed);
@@ -469,14 +469,10 @@ void showEsplora2(String s,int w,int h,int strS){
   EsploraTFT.rect(0,70,W/2,H);
   EsploraTFT.stroke(0,0,0);
   EsploraTFT.setTextSize(1);
-  EsploraTFT.text("turn diff",w-20,h - 10);
+  EsploraTFT.text("turn speed",w-20,h - 10);
   EsploraTFT.setTextSize(strS);
   EsploraTFT.text(speed_c,w,h + 10);
-  /*
-  EsploraTFT.rect(W/2,70,W,H);
-  EsploraTFT.stroke(0,0,0);
-  EsploraTFT.text(speed_c,w,h);
-  */
+ 
   }
   void showEsplora3(String s,int w,int h,int strS){
   String str;
